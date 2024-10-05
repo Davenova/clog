@@ -1,6 +1,6 @@
 document.getElementById('fetchData').addEventListener('click', function () {
     // Relative path to the backend API deployed on Vercel
-    fetch('/api/server')
+    fetch('/api/user') // Updated to correct endpoint
         .then(response => response.json())
         .then(data => {
             if (data.message) {
