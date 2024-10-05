@@ -1,0 +1,34 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "project/index.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "api/**/*.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "prisma/schema.prisma",
+      "use": "@vercel/static-build",
+      "config": {
+        "installCommand": "npm install && npx prisma generate",
+        "buildCommand": "npm run build"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/project/index.html"
+    }
+  ],
+  "env": {
+    "DATABASE_URL": "@your_database_url"
+  }
+}
