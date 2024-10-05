@@ -24,7 +24,4 @@
       "dest": "/project/index.html"
     }
   ],
-  "env": {
-    "DATABASE_URL": "@your_database_url"
-  }
 }
