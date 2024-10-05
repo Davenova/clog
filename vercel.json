@@ -6,12 +6,8 @@
       "use": "@vercel/node"
     },
     {
-      "src": "prisma/schema.prisma",
-      "use": "@vercel/static-build",
-      "config": {
-        "installCommand": "npm install && npx prisma generate",
-        "buildCommand": "npm run build"
-      }
+      "src": "project/index.html",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
