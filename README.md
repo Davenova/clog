@@ -1,4 +1,4 @@
-# Clock is tickng
+# Clock is ticking
 
 This is project is a beta version of official release. Stay tuned.
  
