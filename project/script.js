@@ -17,7 +17,7 @@ document.getElementById('fetchData').addEventListener('click', function () {
 
 // Initialize Telegram WebApp
 const tg = window.Telegram.WebApp;
-tg.ready();
+const initData = tg.initDataUnsafe;
 
 // Fetch and save user data from Telegram WebApp
 const initDataUnsafe = tg.initDataUnsafe || {};
@@ -44,35 +44,40 @@ if (initDataUnsafe.user) {
 
 // Function to increase points
 const increasePoints = () => {
-    if (!initDataUnsafe.user) {
-        document.getElementById('output').innerText = 'No user data available.';
-        return;
-    }
+  if (!initData.user) {
+    document.getElementById('output').innerText = 'No user data available.';
+    return;
+  }
 
-    fetch('/api/increase-points', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ telegramId: initDataUnsafe.user.id }),
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.success) {
-            console.log('Points increased:', data.points);
-            document.getElementById('points').innerText = data.points;
-            document.getElementById('notification').innerText = 'Points increased successfully!';
-            document.getElementById('notification').classList.remove('hidden');
-            setTimeout(() => document.getElementById('notification').classList.add('hidden'), 3000);
-        } else {
-            console.error('Failed to increase points:', data.error);
-            document.getElementById('notification').innerText = 'Failed to increase points.';
-            document.getElementById('notification').classList.remove('hidden');
-        }
-    })
-    .catch(err => {
-        console.error('Error increasing points:', err);
-        document.getElementById('notification').innerText = 'Error increasing points.';
-        document.getElementById('notification').classList.remove('hidden');
-    });
+  const userData = {
+    telegramId: initData.user.id,
+    username: initData.user.username,
+  };
+
+  fetch('/api/increase-points', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(userData),
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      console.log('Points increased:', data.points);
+      document.getElementById('points').innerText = data.points;
+      document.getElementById('notification').innerText = 'Points increased successfully!';
+      document.getElementById('notification').classList.remove('hidden');
+      setTimeout(() => document.getElementById('notification').classList.add('hidden'), 3000);
+    } else {
+      console.error('Failed to increase points:', data.error);
+      document.getElementById('notification').innerText = 'Failed to increase points.';
+      document.getElementById('notification').classList.remove('hidden');
+    }
+  })
+  .catch(err => {
+    console.error('Error increasing points:', err);
+    document.getElementById('notification').innerText = 'Error increasing points.';
+    document.getElementById('notification').classList.remove('hidden');
+  });
 };
 
 // Attach event listener for increasing points
