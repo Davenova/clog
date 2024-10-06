@@ -42,25 +42,37 @@ app.post('/api/user', async (req, res) => {
 
 // Endpoint to increase user points
 app.post('/api/increase-points', async (req, res) => {
-    try {
-        const { telegramId } = req.body;
+  const { telegramId, username } = req.body;
 
-        if (!telegramId) {
-            return res.status(400).json({ error: 'Invalid telegramId' });
-        }
+  if (!telegramId) {
+    return res.status(400).json({ error: 'Invalid telegramId' });
+  }
 
-        const updatedUser = await prisma.user.update({
-            where: { telegramId },
-            data: { points: { increment: 1 } }
-        });
+  try {
+    const user = await prisma.user.findUnique({ where: { telegramId } });
 
-        return res.json({ success: true, points: updatedUser.points });
-    } catch (error) {
-        console.error('Error increasing points:', error);
-        return res.status(500).json({ error: 'Internal server error' });
+    if (!user) {
+      const newUser = await prisma.user.create({
+        data: {
+          telegramId,
+          username,
+          points: 0,
+        },
+      });
+      return res.json({ success: true, points: newUser.points });
     }
-});
 
+    const updatedUser = await prisma.user.update({
+      where: { telegramId },
+      data: { points: { increment: 1 } },
+    });
+
+    return res.json({ success: true, points: updatedUser.points });
+  } catch (error) {
+    console.error('Error increasing points:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 // Telegram Web App setup
 const telegramWebApp = new TelegramWebApp({
