@@ -1,6 +1,6 @@
+// Fetch user data when the "fetchData" button is clicked
 document.getElementById('fetchData').addEventListener('click', function () {
-    // Relative path to the backend API deployed on Vercel
-    fetch('/api/user') // Updated to correct endpoint
+    fetch('/api/user') // API endpoint for fetching user data
         .then(response => response.json())
         .then(data => {
             if (data.message) {
@@ -15,7 +15,6 @@ document.getElementById('fetchData').addEventListener('click', function () {
         });
 });
 
-
 // Initialize Telegram WebApp
 const tg = window.Telegram.WebApp;
 tg.ready();
@@ -29,13 +28,13 @@ if (initDataUnsafe.user) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(initDataUnsafe.user),
     })
-    .then((res) => res.json())
-    .then((data) => {
+    .then(res => res.json())
+    .then(data => {
         console.log('User data saved:', data);
         document.getElementById('welcome-message').innerText = `Welcome, ${data.firstName}!`;
         document.getElementById('points').innerText = data.points;
     })
-    .catch((err) => {
+    .catch(err => {
         console.error('Failed to fetch user data:', err);
         document.getElementById('output').innerText = 'Error fetching user data.';
     });
@@ -55,8 +54,8 @@ const increasePoints = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ telegramId: initDataUnsafe.user.id }),
     })
-    .then((res) => res.json())
-    .then((data) => {
+    .then(res => res.json())
+    .then(data => {
         if (data.success) {
             console.log('Points increased:', data.points);
             document.getElementById('points').innerText = data.points;
@@ -69,7 +68,7 @@ const increasePoints = () => {
             document.getElementById('notification').classList.remove('hidden');
         }
     })
-    .catch((err) => {
+    .catch(err => {
         console.error('Error increasing points:', err);
         document.getElementById('notification').innerText = 'Error increasing points.';
         document.getElementById('notification').classList.remove('hidden');
