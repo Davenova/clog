@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
   })
   .then(res => res.json())
   .then(data => {
-    console.log('User  data:', data);
+    console.log('User data:', data);
     document.getElementById('welcome-message').innerText = `Welcome, ${data.username}!`;
     document.getElementById('points').innerText = data.points;
   })
