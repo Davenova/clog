@@ -10,8 +10,9 @@ app.use(bodyParser.json());
 app.post('/api/user', async (req, res) => {
   const { id, username } = req.body;
 
+ // Check for missing id
   if (!id) {
-    return res.status(400).json({ error: 'Invalid user data' });
+    return res.status(400).json({ error: 'Invalid user data: id is required' });
   }
 
   try {
