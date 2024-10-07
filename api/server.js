@@ -10,10 +10,7 @@ app.use(bodyParser.json());
 app.post('/api/user', async (req, res) => {
   const { id, username } = req.body;
 
- // Check for missing id
-  if (!id) {
-    return res.status(400).json({ error: 'Invalid user data: id is required' });
-  }
+  console.log('Received user data:', id, username);
 
   try {
     let user = await prisma.user.upsert({
@@ -26,6 +23,8 @@ app.post('/api/user', async (req, res) => {
       },
     });
 
+    console.log('User  data:', user);
+
     return res.json(user);
   } catch (error) {
     console.error('Error processing user data:', error);
@@ -36,17 +35,17 @@ app.post('/api/user', async (req, res) => {
 app.post('/api/increase-points', async (req, res) => {
   const { telegramId } = req.body;
 
-  if (!telegramId) {
-    return res.status(400).json({ error: 'Invalid telegramId' });
-  }
+  console.log('Received increase points request for user:', telegramId);
 
   try {
-    const updatedUser = await prisma.user.update({
+    const updatedUser  = await prisma.user.update({
       where: { telegramId: telegramId },
       data: { points: { increment: 1 } },
     });
 
-    return res.json({ success: true, points: updatedUser.points });
+    console.log('Updated user data:', updatedUser );
+
+    return res.json({ success: true, points: updatedUser .points });
   } catch (error) {
     console.error('Error increasing points:', error);
     return res.status(500).json({ error: 'Internal server error' });
