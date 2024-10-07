@@ -11,12 +11,12 @@ router.post('/increase-points', async (req, res) => {
   }
 
   try {
-    const updatedUser  = await prisma.user.update({
+    const updatedUser = await prisma.user.update({
       where: { telegramId },
       data: { points: { increment: 1 } },
     });
 
-    res.json({ success: true, points: updatedUser .points });
+    res.json({ success: true, points: updatedUser.points });
   } catch (error) {
     console.error('Error increasing points:', error);
     res.status(500).json({ error: 'Internal server error' });
